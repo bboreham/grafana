@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/grafana/grafana/pkg/api/dtos"
+	"github.com/grafana/grafana/pkg/infra/tracing"
 	ac "github.com/grafana/grafana/pkg/services/accesscontrol"
 	contextmodel "github.com/grafana/grafana/pkg/services/contexthandler/model"
 	"github.com/grafana/grafana/pkg/services/dashboards"
@@ -139,6 +140,7 @@ func (hs *HTTPServer) setIndexViewData(c *contextmodel.ReqContext) (*dtos.IndexV
 		Nonce:                               c.RequestNonce,
 		ContentDeliveryURL:                  hs.Cfg.GetContentDeliveryURL(hs.License.ContentDeliveryPrefix()),
 		LoadingLogo:                         "public/img/grafana_icon.svg",
+		TraceID:                             tracing.TraceIDFromContext(c.Req.Context(), true),
 	}
 
 	if !hs.AccessControl.IsDisabled() {
